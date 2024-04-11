@@ -4,7 +4,6 @@ export default defineNuxtConfig({
       apiHost: process.env.API_HOST,
     },
   },
-  ssr: false,
   devtools: { enabled: true },
   modules: [
     '@nuxtjs/strapi',

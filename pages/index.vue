@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import type { ApiRecipeRecipe } from '~/types/generated/contentTypes';
-import type { Strapi4ResponseData } from '@nuxtjs/strapi';
+import IngredientsViewer from '~/component/IngredientsViewer.vue';
+import RecipeSearch from '~/component/RecipeSearch.vue';
 const { find } = useStrapi();
 
-const recipes: Ref<Strapi4ResponseData<ApiRecipeRecipe>[]> = ref([]);
-
-onMounted(async () => {
+const { data: recipes, error } = await useAsyncData(async () => {
   const response = await find<ApiRecipeRecipe>('recipes', { populate: 'deep' });
-  recipes.value = response?.data ?? [];
-});
+  return response?.data ?? [];
+})
+
+const recipeSelected = (recipe: string) => {
+  console.log('recipe', recipe);
+}
 
 definePageMeta({
   middleware: 'auth'
@@ -17,6 +20,8 @@ definePageMeta({
 
 <template>
   <div class="max-w-screen-xl">
+    <RecipeSearch @recipe-selected="recipeSelected" />
+
     <DataTable :value="recipes" tableStyle="min-width: 50rem">
       <template #header>
         <div class="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -25,6 +30,11 @@ definePageMeta({
       </template>
       <Column field="attributes.name" header="Name"></Column>
       <Column field="attributes.description" header="Description"></Column>
+      <Column field="attributes.ingredients.data" header="Ingredients">
+        <template #body="slotProps">
+          <IngredientsViewer :recipe="slotProps.data" />
+        </template>
+      </Column>
       <template #footer> In total there are {{ recipes ? recipes.length : 0 }} recipes. </template>
     </DataTable>
   </div>
