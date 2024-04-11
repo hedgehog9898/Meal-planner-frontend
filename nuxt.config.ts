@@ -9,7 +9,8 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/strapi',
     'nuxt-primevue',
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+    '@vee-validate/nuxt'
   ],
   primevue: {
     usePrimeVue: true,
@@ -29,6 +30,9 @@ export default defineNuxtConfig({
       tailwindcss: {},
       autoprefixer: {},
     },
+  },
+  veeValidate: {
+    autoImports: false
   },
   strapi: {
     cookie: {

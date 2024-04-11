@@ -7,8 +7,6 @@ const recipes: Ref<Strapi4ResponseData<ApiRecipeRecipe>[]> = ref([]);
 
 onMounted(async () => {
   const response = await find<ApiRecipeRecipe>('recipes', { populate: 'deep' });
-
-  console.log('response', response);
   recipes.value = response?.data ?? [];
 });
 
@@ -19,11 +17,16 @@ definePageMeta({
 
 <template>
   <div class="max-w-screen-xl">
-    <div
-      v-for="recipe of recipes"
-      :key="`${recipe.id}-recipe`"
-    >
-    </div>
+    <DataTable :value="recipes" tableStyle="min-width: 50rem">
+      <template #header>
+        <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+          <span class="text-xl text-900 font-bold">Recipes</span>
+        </div>
+      </template>
+      <Column field="attributes.name" header="Name"></Column>
+      <Column field="attributes.description" header="Description"></Column>
+      <template #footer> In total there are {{ recipes ? recipes.length : 0 }} recipes. </template>
+    </DataTable>
   </div>
 </template>
 
