@@ -3,7 +3,7 @@ import type { ApiRecipeRecipe } from '~/types/generated/contentTypes';
 
 interface IngredientsViewerProps {
   recipe: ApiRecipeRecipe
-};
+}
 
 const props = defineProps<IngredientsViewerProps>();
 const ingredients = computed(() => {

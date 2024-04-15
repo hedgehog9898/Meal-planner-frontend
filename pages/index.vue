@@ -1,16 +1,29 @@
 <script setup lang="ts">
-import type { ApiRecipeRecipe } from '~/types/generated/contentTypes';
-import IngredientsViewer from '~/component/IngredientsViewer.vue';
-import RecipeSearch from '~/component/RecipeSearch.vue';
-const { find } = useStrapi();
+import IngredientsPlannerTable from '~/component/IngredientsPlanner/IngredientsPlannerTable.vue';
+import RecipePlanner from '~/component/RecipePlanner/RecipePlanner.vue';
+import RecipeTable from '~/component/RecipeTable.vue';
+import type { ApiRecipeRecipe, ApiSavedRecipeSavedRecipe } from '~/types/generated/contentTypes';
 
-const { data: recipes, error } = await useAsyncData(async () => {
+const { find, create } = useStrapi();
+
+const savedRecipes = ref<any[]>([]);
+const { data: recipes } = await useAsyncData(async () => {
   const response = await find<ApiRecipeRecipe>('recipes', { populate: 'deep' });
   return response?.data ?? [];
 })
 
-const recipeSelected = (recipe: string) => {
-  console.log('recipe', recipe);
+await useAsyncData(async () => {
+  await fetchSavedRecipes();
+})
+
+async function fetchSavedRecipes () {
+  const response = await find<ApiSavedRecipeSavedRecipe>('saved-recipes', { populate: 'deep' });
+  savedRecipes.value = response.data ?? [];
+}
+
+const planRecipe = async (recipe: ApiSavedRecipeSavedRecipe) => {
+  await create<ApiSavedRecipeSavedRecipe>('saved-recipes', recipe);
+  await fetchSavedRecipes();
 }
 
 definePageMeta({
@@ -19,24 +32,12 @@ definePageMeta({
 </script>
 
 <template>
-  <div class="max-w-screen-xl">
-    <RecipeSearch @recipe-selected="recipeSelected" />
+  <div class="w-full max-w-screen-xl">
+    <IngredientsPlannerTable :saved-recipes="savedRecipes" />
 
-    <DataTable :value="recipes" tableStyle="min-width: 50rem">
-      <template #header>
-        <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-          <span class="text-xl text-900 font-bold">Recipes</span>
-        </div>
-      </template>
-      <Column field="attributes.name" header="Name"></Column>
-      <Column field="attributes.description" header="Description"></Column>
-      <Column field="attributes.ingredients.data" header="Ingredients">
-        <template #body="slotProps">
-          <IngredientsViewer :recipe="slotProps.data" />
-        </template>
-      </Column>
-      <template #footer> In total there are {{ recipes ? recipes.length : 0 }} recipes. </template>
-    </DataTable>
+    <RecipePlanner :saved-recipes="savedRecipes" @plan-recipe="planRecipe" class="mb-4" />
+
+    <RecipeTable :recipes="recipes" />
   </div>
 </template>
 
