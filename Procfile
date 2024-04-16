@@ -1,1 +1,0 @@
-release: bun run start
