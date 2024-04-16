@@ -1,7 +1,7 @@
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
-      apiHost: process.env.API_HOST,
+      apiHost: process.env.STRAPI_URL,
     },
   },
   devtools: { enabled: true },
