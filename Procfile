@@ -1,1 +1,1 @@
-web: bun run start
+release: bun run start
