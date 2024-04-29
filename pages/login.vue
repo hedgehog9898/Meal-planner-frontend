@@ -2,6 +2,11 @@
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
+import { definePageMeta } from '#imports';
+
+definePageMeta({
+  layout: 'login'
+})
 
 const { login } = useStrapiAuth()
 const router = useRouter()
@@ -30,7 +35,7 @@ const onSubmit = handleSubmit(async  ({ email, password }) => {
 });
 </script>
 <template>
-  <form class="w-1/4 space-y-6" @submit="onSubmit">
+  <form class="w-full lg:w-1/4 space-y-6" @submit="onSubmit">
     <div class="flex flex-col justify-center">
       <h1 class="text-2xl mb-6 text-center">Login form</h1>
       <div class="flex flex-col justify-center mb-6">
