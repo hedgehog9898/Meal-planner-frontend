@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { IApiSavedRecipeSavedRecipe } from '~/types/recipe-interfaces';
-import type { ApiIngredientIngredient } from '~/types/generated/contentTypes';
+import type { IApiSavedRecipeSavedRecipe, IIngredient } from '~/types/recipe-interfaces';
 
 interface IngredientsPlannerTableProps {
   savedRecipes: IApiSavedRecipeSavedRecipe[]
@@ -10,16 +9,16 @@ const props = defineProps<IngredientsPlannerTableProps>();
 const ingredientsData = computed(() => {
   // First, flatten the array of ingredients
   const allIngredients = props.savedRecipes.flatMap(plannedRecipe =>
-      plannedRecipe.attributes.recipe.data.attributes.ingredients.data
+      plannedRecipe.attributes.recipe.data.attributes.ingredients
   );
 
-  const mergedIngredients = allIngredients.reduce((accum: ApiIngredientIngredient[], ingredient: ApiIngredientIngredient) => {
+  const mergedIngredients = allIngredients.reduce((accum: IIngredient[], ingredient: IIngredient) => {
     // Find an existing ingredient with the same name
-    const existingIngredient = accum.find((ing: ApiIngredientIngredient) => ing.attributes.name === ingredient.attributes.name);
+    const existingIngredient = accum.find((ing: IIngredient) => ing.name === ingredient.name);
 
     if ( existingIngredient ) {
       // If found, sum the count_number
-      existingIngredient.attributes.count_number += ingredient.attributes.count_number;
+      existingIngredient.count_number += ingredient.count_number;
     } else {
       // If not found, clone the ingredient and add it to the accumulator
       const clonedIngredient = structuredClone(toRaw(ingredient));
@@ -29,10 +28,10 @@ const ingredientsData = computed(() => {
     return accum;
   }, []);
 
-  return mergedIngredients.map((ingredient: ApiIngredientIngredient) => {
+  return mergedIngredients.map((ingredient: IIngredient) => {
     return {
-      name: ingredient.attributes.name,
-      count: `${ingredient.attributes.count_number} ${ingredient.attributes.count_name}`
+      name: ingredient.name,
+      count: `${ingredient.count_number} ${ingredient.count_name}`
     }
   })
 });

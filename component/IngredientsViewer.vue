@@ -7,7 +7,7 @@ interface IngredientsViewerProps {
 
 const props = defineProps<IngredientsViewerProps>();
 const ingredients = computed(() => {
-  return props.recipe.attributes.ingredients.data.map((ingredient: any) => { return { name: ingredient.attributes.name, count: `${ingredient.attributes.count_number} ${ingredient.attributes.count_name}` } });
+  return props.recipe.attributes.ingredients.map((ingredient: any) => { return { name: ingredient.name, count: `${ingredient.count_number} ${ingredient.count_name}` } });
 })
 </script>
 

@@ -17,7 +17,7 @@ const props = defineProps<RecipeTableProps>();
     </template>
     <Column field="attributes.name" header="Название"></Column>
     <Column field="attributes.description" header="Описание"></Column>
-    <Column field="attributes.ingredients.data" header="Ингредиенты">
+    <Column field="attributes.ingredients" header="Ингредиенты">
       <template #body="slotProps">
         <IngredientsViewer :recipe="slotProps.data" />
       </template>

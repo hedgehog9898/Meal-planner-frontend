@@ -6,6 +6,13 @@ interface RecipePlannerTableProps {
   savedRecipes: IApiSavedRecipeSavedRecipe[]
 }
 const props = defineProps<RecipePlannerTableProps>();
+const emit = defineEmits<{
+  (e: 'delete-planned-recipe', recipeId: number): void
+}>();
+
+const onDeletePlannedRecipe = (id: number) => {
+  emit('delete-planned-recipe', id);
+}
 </script>
 
 <template>
@@ -23,6 +30,14 @@ const props = defineProps<RecipePlannerTableProps>();
       </Column>
       <Column field="attributes.time" header="Время приема"></Column>
       <Column field="attributes.recipe.data.attributes.name" header="Рецепт"></Column>
+      <Column field="attributes.id" header="Действия">
+        <template #body="slotProps">
+          <Button
+            severity="danger"
+            @click="onDeletePlannedRecipe(slotProps.data.id)"
+          >Удалить</Button>
+        </template>
+      </Column>
     </DataTable>
   </ClientOnly>
 </template>

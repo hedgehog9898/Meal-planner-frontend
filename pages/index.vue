@@ -3,6 +3,7 @@ import IngredientsPlannerTable from '~/component/IngredientsPlanner/IngredientsP
 import RecipePlanner from '~/component/RecipePlanner/RecipePlanner.vue';
 import RecipeTable from '~/component/RecipeTable.vue';
 import type { ApiRecipeRecipe, ApiSavedRecipeSavedRecipe } from '~/types/generated/contentTypes';
+import { useIFetch } from '#imports';
 
 const { find, create } = useStrapi();
 
@@ -26,6 +27,12 @@ const planRecipe = async (recipe: ApiSavedRecipeSavedRecipe) => {
   await fetchSavedRecipes();
 }
 
+const deletePlannedRecipe = async (recipeId: number) => {
+  const url = useStrapiUrl();
+  await useIFetch(`${url}/saved-recipes/${recipeId}`, { method: 'DELETE' });
+  await fetchSavedRecipes();
+}
+
 definePageMeta({
   middleware: 'auth'
 });
@@ -34,9 +41,7 @@ definePageMeta({
 <template>
   <div class="w-full max-w-screen-xl">
     <IngredientsPlannerTable :saved-recipes="savedRecipes" />
-
-    <RecipePlanner :saved-recipes="savedRecipes" @plan-recipe="planRecipe" class="mb-4" />
-
+    <RecipePlanner :saved-recipes="savedRecipes" @plan-recipe="planRecipe" @delete-planned-recipe="deletePlannedRecipe" class="mb-4" />
     <RecipeTable :recipes="recipes" />
   </div>
 </template>

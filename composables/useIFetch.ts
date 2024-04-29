@@ -1,9 +1,10 @@
 import type { UseFetchOptions } from '#app';
 import { defu } from 'defu';
+import { $fetch, type FetchOptions } from 'ofetch';
 
 export async function useIFetch<T>(
     url: string,
-    options: UseFetchOptions<T> = {}
+    options: FetchOptions<any> = {}
 ) {
     const accessTokenCookie = useCookie('accessToken');
     const config = useRuntimeConfig();
@@ -18,5 +19,5 @@ export async function useIFetch<T>(
 
     const params = defu(options, defaults);
 
-    return useFetch(url, params);
+    return $fetch(url, params);
 }
