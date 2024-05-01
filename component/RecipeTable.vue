@@ -9,7 +9,7 @@ const props = defineProps<RecipeTableProps>();
 </script>
 
 <template>
-  <DataTable :value="props.recipes">
+  <DataTable :value="props.recipes" scrollable scrollHeight="400px">
     <template #header>
       <div class="flex flex-wrap align-items-center justify-content-between gap-2">
         <span class="text-xl text-900 font-bold">Рецепты</span>

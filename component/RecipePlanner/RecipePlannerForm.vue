@@ -15,14 +15,16 @@ const emit = defineEmits<{
     date: string;
     recipe: IApiRecipe;
     time: string;
-    user: StrapiUser | null
+    user: StrapiUser | null,
+    already_cooked: boolean
   }): void
 }>()
 
 const formSchema = toTypedSchema(z.object({
   recipe: z.custom<IApiRecipe>(),
   time: z.string(),
-  date: z.date()
+  date: z.date(),
+  already_cooked: z.boolean()
 }));
 
 const { defineField, handleSubmit, errors } = useForm({
@@ -32,11 +34,12 @@ const { defineField, handleSubmit, errors } = useForm({
 const [recipe] = defineField('recipe');
 const [time] = defineField('time');
 const [date] = defineField('date');
+const [already_cooked] = defineField('already_cooked');
 
 const recipeTimes = ref(['Завтрак', 'Обед', 'Ужин']);
 
-const onSubmit = handleSubmit(async  ({ recipe, time, date }) => {
-  emit('plan-recipe', { recipe, time, date: formatDateForBe(date), user: user.value })
+const onSubmit = handleSubmit(async  ({ recipe, time, date, already_cooked }) => {
+  emit('plan-recipe', { recipe, time, date: formatDateForBe(date), already_cooked, user: user.value })
 });
 </script>
 <template>
@@ -65,6 +68,14 @@ const onSubmit = handleSubmit(async  ({ recipe, time, date }) => {
           <Calendar v-model="date" date-format="dd.mm.yy" id="recipe-day" name="recipe-day" placeholder="24.12.2024" class="w-full h-10" />
           <InlineMessage v-if="errors.date" severity="error" class="w-full mt-1">
             {{ errors.date }}
+          </InlineMessage>
+        </div>
+
+        <div class="mb-2">
+          <label for="recipe-already-booked">Рецепт уже готов?</label>
+          <Checkbox v-model="already_cooked" binary id="recipe-already-booked" name="recipe-already-booked" class="w-full h-10" />
+          <InlineMessage v-if="errors.already_cooked" severity="error" class="w-full mt-1">
+            {{ errors.already_cooked }}
           </InlineMessage>
         </div>
       </div>

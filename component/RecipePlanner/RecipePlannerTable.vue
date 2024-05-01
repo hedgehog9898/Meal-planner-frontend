@@ -17,7 +17,7 @@ const onDeletePlannedRecipe = (id: number) => {
 
 <template>
   <ClientOnly>
-    <DataTable :value="props.savedRecipes" rowGroupMode="rowspan" groupRowsBy="attributes.date" sortMode="single" sortField="date" :sortOrder="1" class="mb-4">
+    <DataTable :value="props.savedRecipes" scrollable scrollHeight="400px" rowGroupMode="rowspan" groupRowsBy="attributes.date" sortMode="single" sortField="date" :sortOrder="1" class="mb-4">
       <template #header>
         <div class="flex flex-wrap align-items-center justify-content-between gap-2">
           <span class="text-xl text-900 font-bold">Запланированные рецепты</span>

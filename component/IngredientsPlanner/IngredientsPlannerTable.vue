@@ -7,8 +7,9 @@ interface IngredientsPlannerTableProps {
 const props = defineProps<IngredientsPlannerTableProps>();
 
 const ingredientsData = computed(() => {
+  const notCookedRecipes = props.savedRecipes.filter(plannedRecipe => !plannedRecipe.attributes.already_cooked);
   // First, flatten the array of ingredients
-  const allIngredients = props.savedRecipes.flatMap(plannedRecipe =>
+  const allIngredients = notCookedRecipes.flatMap(plannedRecipe =>
       plannedRecipe.attributes.recipe.data.attributes.ingredients
   );
 
@@ -39,7 +40,7 @@ const ingredientsData = computed(() => {
 
 <template>
   <ClientOnly>
-    <DataTable :value="ingredientsData" sortField="name" :sortOrder="1" class="mb-4">
+    <DataTable :value="ingredientsData" scrollable scrollHeight="400px" sortField="name" :sortOrder="1" class="mb-4">
       <template #header>
         <div class="flex flex-wrap align-items-center justify-content-between gap-2">
           <span class="text-xl text-900 font-bold">Ингредиенты которые нужны для приготовления плана</span>

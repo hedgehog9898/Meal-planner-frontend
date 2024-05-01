@@ -425,6 +425,7 @@ export interface ApiSavedRecipeSavedRecipe extends Schema.CollectionType {
       ]
     >;
     date: Attribute.DateTime;
+    already_cooked: Attribute.Boolean & Attribute.DefaultTo<false>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
