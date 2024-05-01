@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { IApiSavedRecipeSavedRecipe } from '~/types/recipe-interfaces';
-import { formatDate } from '~/utils/date-helpers';
+import { formatDate, getDayName } from '~/utils/date-helpers';
 
 interface RecipePlannerTableProps {
   savedRecipes: IApiSavedRecipeSavedRecipe[]
@@ -25,7 +25,7 @@ const onDeletePlannedRecipe = (id: number) => {
       </template>
       <Column field="attributes.date" header="Дата">
         <template #body="slotProps">
-          <span>{{ formatDate(slotProps.data.attributes.date) }}</span>
+          <span>{{ formatDate(slotProps.data.attributes.date) }} {{ getDayName(slotProps.data.attributes.date) }}</span>
         </template>
       </Column>
       <Column field="attributes.time" header="Время приема"></Column>

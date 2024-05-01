@@ -24,7 +24,7 @@ const formSchema = toTypedSchema(z.object({
   recipe: z.custom<IApiRecipe>(),
   time: z.string(),
   date: z.date(),
-  already_cooked: z.boolean()
+  already_cooked: z.boolean().optional()
 }));
 
 const { defineField, handleSubmit, errors } = useForm({
